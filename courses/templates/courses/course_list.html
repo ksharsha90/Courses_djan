@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{% load static from staticfiles %}
+
+{% block static %} <link rel="stylesheet" href="{% static 'courses/css/courses.css' %}">{% endblock static %}
+{% block title%} Available Courses {% endblock title %}
+
+{% block content %}
+	<div class="cards">
+		{% for course in courses %}
+		<div class="card">
+			<header><a href="{% url 'detail' pk=course.pk %}">{{ course.title }}</a></header>
+			<div class="card-copy">
+				{% if course.description|wordcount <= 5 %} <!-- here, we are using word count filter-->
+					{{ course.description }}
+				{% else %}
+					{{ course.description.truncatewords: 5 }}
+					<a href="{% url 'detail' pk=course.pk %}">Read more</a>
+				{% endif %}
+				<div>Created on: {{ course.created_at|date:"F j, Y"}}</div> <!--F-for the month, j-for the day, Y-for the four digit of the year-->
+			</div>
+		</div>
+		{% endfor %}
+		<div>Have questions? Contact us! <a href="mailto: {{ email }}">{{ email }}</a></div>
+	</div>
+{% endblock content %}
